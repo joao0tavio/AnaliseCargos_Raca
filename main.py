@@ -40,3 +40,39 @@ print(f"Mediana: {lider_2025['Percentual_Negros'].median():.2f}%")
 print(f"Desvio Padrão: {lider_2025['Percentual_Negros'].std():.2f}")
 print(f"Q1: {lider_2025['Percentual_Negros'].quantile(0.25):.2f}%")
 print(f"Q3: {lider_2025['Percentual_Negros'].quantile(0.75):.2f}%")
+
+plt.style.use('seaborn-v0_8-darkgrid')
+sns.set_palette("husl")
+
+print("Gerando gráfico de pizza:")
+
+total_amarelo = lider_2025['Quantidade_Amarelo'].sum()
+total_branco = lider_2025['Quantidade_Branco'].sum()
+total_preto = lider_2025['Quantidade_Preto'].sum()
+total_pardo = lider_2025['Quantidade_Pardo'].sum()
+total_indigena = lider_2025['Quantidade_Indigena'].sum()
+total_outros = lider_2025['Quantidade_Outros'].sum()
+
+racas = ['Amarelo', 'Branco', 'Preto', 'Pardo', 'Indígena', 'Outros']
+valores = [total_amarelo, total_branco, total_preto, total_pardo, total_indigena, total_outros]
+cores = ['#FFD700', '#E8E8E8', '#8B4513', '#D2691E', '#FF6347', '#A9A9A9']
+
+fig, ax = plt.subplots(figsize=(12, 8))
+wedges, texts, autotexts = ax.pie(valores, 
+                                    labels=racas, 
+                                    autopct='%1.1f%%',
+                                    colors=cores,
+                                    startangle=90,
+                                    textprops={'fontsize': 11, 'weight': 'bold'})
+
+
+for autotext in autotexts:
+    autotext.set_color('black')
+    autotext.set_fontsize(10)
+
+plt.title('Distribuição Racial em Cargos de Liderança (2025)\nEmpresas de Capital Aberto B3', 
+          fontsize=14, weight='bold', pad=20)
+plt.tight_layout()
+plt.savefig('grafico_pizza_lideranca_raca.png', dpi=300, bbox_inches='tight')
+plt.close()
+print("✓ Gráfico de pizza salvo: grafico_pizza_lideranca_raca.png")
