@@ -76,7 +76,7 @@ plt.title('Distribuição Racial em Cargos de Liderança (2025)\nEmpresas de Cap
 plt.tight_layout()
 plt.savefig('grafico_pizza_lideranca_raca.png', dpi=300, bbox_inches='tight')
 plt.close()
-print("✓ Gráfico de pizza salvo: grafico_pizza_lideranca_raca.png")
+print("Gráfico de pizza salvo: grafico_pizza_lideranca_raca.png\n")
 
 
 # GRÁFICO DE BARRAS
@@ -101,15 +101,9 @@ width = 0.35
 
 fig, ax = plt.subplots(figsize=(14, 8))
 bars1 = ax.bar(x - width/2, perc_lider, width, label='Liderança', color='#2E86AB', alpha=0.8)
-bars2 = ax.bar(x + width/2, perc_nao_lider, width, label='Não Liderança', color='#F08080', alpha=0.8)
 
 
 for bar in bars1:
-    height = bar.get_height()
-    ax.text(bar.get_x() + bar.get_width()/2., height,
-            f'{height:.1f}%', ha='center', va='bottom', fontsize=9, weight='bold')
-
-for bar in bars2:
     height = bar.get_height()
     ax.text(bar.get_x() + bar.get_width()/2., height,
             f'{height:.1f}%', ha='center', va='bottom', fontsize=9, weight='bold')
@@ -127,4 +121,43 @@ ax.grid(axis='y', alpha=0.3)
 plt.tight_layout()
 plt.savefig('grafico_barras_lideranca_comparacao.png', dpi=300, bbox_inches='tight')
 plt.close()
-print("✓ Gráfico de barras salvo: grafico_barras_lideranca_comparacao.png\n")
+print("Gráfico de barras salvo: grafico_barras_lideranca_comparacao.png\n")
+
+# GRÁFICO DE LINHA
+print("Gerando gráfico de linha temporal...")
+
+perc_pretos_2024 = (lider_2024['Quantidade_Preto'].sum() / lider_2024['Total_Empregados'].sum()) * 100
+perc_pretos_2025 = (lider_2025['Quantidade_Preto'].sum() / lider_2025['Total_Empregados'].sum()) * 100
+
+perc_brancos_2024 = (lider_2024['Quantidade_Branco'].sum() / lider_2024['Total_Empregados'].sum()) * 100
+perc_brancos_2025 = (lider_2025['Quantidade_Branco'].sum() / lider_2025['Total_Empregados'].sum()) * 100
+
+anos = [2024, 2025]
+pretos = [perc_pretos_2024, perc_pretos_2025]
+brancos = [perc_brancos_2024, perc_brancos_2025]
+
+fig, ax = plt.subplots(figsize=(12, 8))
+
+ax.plot(anos, pretos, marker='o', linewidth=3, markersize=12, 
+        label='Pretos', color='#8B4513', linestyle='-')
+ax.plot(anos, brancos, marker='s', linewidth=3, markersize=12, 
+        label='Brancos', color='#4169E1', linestyle='-')
+
+for i, (ano, valor) in enumerate(zip(anos, pretos)):
+    ax.text(ano, valor + 0.5, f'{valor:.2f}%', ha='center', fontsize=11, weight='bold', color='#8B4513')
+
+for i, (ano, valor) in enumerate(zip(anos, brancos)):
+    ax.text(ano, valor - 1.5, f'{valor:.2f}%', ha='center', fontsize=11, weight='bold', color='#4169E1')
+
+ax.set_xlabel('Ano', fontsize=12, weight='bold')
+ax.set_ylabel('Percentual em Cargos de Liderança (%)', fontsize=12, weight='bold')
+ax.set_title('Evolução Temporal: Representatividade Racial em Cargos de Liderança\nEmpresas de Capital Aberto B3', 
+             fontsize=14, weight='bold', pad=20)
+ax.set_xticks(anos)
+ax.legend(fontsize=12, loc='best')
+ax.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.savefig('grafico_linha_temporal_pretos_brancos.png', dpi=300, bbox_inches='tight')
+plt.close()
+print("Gráfico de linha temporal salvo: grafico_linha_temporal_pretos_brancos.png")
